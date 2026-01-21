@@ -77,17 +77,27 @@ def index():
     return render_template("form.html")
 
 # -------------------- ADD DATA --------------------
+# -------------------- ADD DATA --------------------
 @app.route("/add", methods=["POST"])
 def add_child():
-    data = (
-        request.form["name"],
-        request.form["age"],
-        request.form["gender"],
-        request.form["height"],
-        request.form["weight"],
-        request.form["disease"]
-    )
+    # Get form values
+    name = request.form.get("name")
+    age = request.form.get("age")
+    gender = request.form.get("gender")
+    
+    # Convert empty height/weight to None (NULL in DB)
+    height = request.form.get("height")
+    height = float(height) if height.strip() != "" else None
 
+    weight = request.form.get("weight")
+    weight = float(weight) if weight.strip() != "" else None
+
+    disease = request.form.get("disease") or None
+
+    # Prepare data tuple
+    data = (name, age, gender, height, weight, disease)
+
+    # Insert into database
     conn = get_db()
     cur = conn.cursor()
     cur.execute("""
@@ -202,3 +212,4 @@ def download_excel():
 # -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
