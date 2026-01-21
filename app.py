@@ -130,26 +130,40 @@ def view_children():
             <td>{c[1]}</td>
             <td>{c[2]}</td>
             <td>{c[3]}</td>
-            <td>{c[4]}</td>
-            <td>{c[5]}</td>
-            <td>{c[6]}</td>
+            <td>{c[4] if c[4] else '-'}</td>
+            <td>{c[5] if c[5] else '-'}</td>
+            <td>{c[6] if c[6] else '-'}</td>
         </tr>
         """
 
     return f"""
-    <h1>Children Healthcare Database</h1>
-    <p>Total Records: {len(data)}</p>
-    <table border="1">
-        <tr>
-            <th>ID</th><th>Name</th><th>Age</th><th>Gender</th>
-            <th>Height</th><th>Weight</th><th>Disease</th>
-        </tr>
-        {rows}
-    </table>
-    <br>
-    <a href="/download">⬇ Download Excel</a> |
-    <a href="/delete_all">🗑 Delete All</a> |
-    <a href="/logout">🚪 Logout</a>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Children Healthcare Database</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body class="p-4">
+        <div class="container">
+            <h1 class="mb-4">Children Healthcare Database</h1>
+            <p>Total Records: <strong>{len(data)}</strong></p>
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th><th>Name</th><th>Age</th><th>Gender</th>
+                        <th>Height</th><th>Weight</th><th>Disease</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+            <a href="/download" class="btn btn-success me-2">⬇ Download Excel</a>
+            <a href="/delete_all" class="btn btn-danger me-2">🗑 Delete All</a>
+            <a href="/logout" class="btn btn-secondary">🚪 Logout</a>
+        </div>
+    </body>
+    </html>
     """
 
 # -------------------- DELETE ALL --------------------
@@ -176,15 +190,35 @@ def result(child_id):
         return "❌ Child not found"
 
     return f"""
-    <h2>Registration Successful</h2>
-    <p>ID: {child[0]}</p>
-    <p>Name: {child[1]}</p>
-    <p>Age: {child[2]}</p>
-    <p>Gender: {child[3]}</p>
-    <p>Height: {child[4]}</p>
-    <p>Weight: {child[5]}</p>
-    <p>Disease: {child[6]}</p>
-    <a href="/">Add Another</a>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Registration Result</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body class="p-4">
+        <div class="container text-center">
+            <div class="card mx-auto" style="max-width: 500px;">
+                <div class="card-header bg-success text-white">
+                    <h3>Registration Successful ✅</h3>
+                </div>
+                <div class="card-body text-start">
+                    <p><strong>ID:</strong> {child[0]}</p>
+                    <p><strong>Name:</strong> {child[1]}</p>
+                    <p><strong>Age:</strong> {child[2]}</p>
+                    <p><strong>Gender:</strong> {child[3]}</p>
+                    <p><strong>Height:</strong> {child[4] if child[4] else '-'}</p>
+                    <p><strong>Weight:</strong> {child[5] if child[5] else '-'}</p>
+                    <p><strong>Disease:</strong> {child[6] if child[6] else '-'}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/" class="btn btn-primary">Add Another</a>
+                    <a href="/view" class="btn btn-secondary">View All</a>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
     """
 
 # -------------------- DOWNLOAD EXCEL --------------------
@@ -212,4 +246,5 @@ def download_excel():
 # -------------------- RUN --------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
